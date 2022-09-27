@@ -15,7 +15,7 @@ class projectile{
   
   void explode() { this.exploding = true; }
   
-  void drawProjectile() { rect(x, y, 10, 10); }
+  void drawProjectile() { rect(x, y, 100, 100); }
   
   float getX() { return this.x; }
   

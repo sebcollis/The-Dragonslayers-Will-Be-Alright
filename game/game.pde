@@ -2,7 +2,7 @@ Char player;
 Char dragon;
 projectile proj;
 Boolean playerAttack = false;
-Boolean dragonAttack = false;
+Boolean dragonAttack = true;
 
 void setup(){
   size(500, 300);
@@ -10,6 +10,8 @@ void setup(){
   background(0);
   player = new Char("player", 10, 275, 20);
   dragon = new Char("dragon", 400, 205, 90);
+  proj = new projectile(dragon.getX(), dragon.getY());
+
 }
 
 void draw(){
@@ -41,18 +43,16 @@ void playerAttack(){
 void isDragonAttacking(){ //is he?
   if (!dragonAttack) {
     if (random(5) > 4.999){ 
-      println("proj");
       dragonAttack = true;
-      proj = new projectile(dragon.getX(), dragon.getY());
     }
   }
   else {
     println("proj");
     proj.drawProjectile();
-    float velocity = 10;
+    float velocity = 1;
     float gravity = -9.61;
     proj.moveX(proj.getX() - velocity);
-    proj.moveY(proj.getX() * gravity/5);
+    //proj.moveY(proj.getY() * gravity/5);
     checkProjCollision(player, proj);
   }
 }
@@ -64,5 +64,5 @@ void checkCharCollision(Char one, Char two){
   
 void checkProjCollision(Char one, projectile two){
   if (one.getX() - two.getX() + 5 < 30){
-    if(playerAttack == true) { print("Player hit by projectile!"); } }
+    if(dragonAttack == true) { print("Player hit by projectile!"); } }
 }
