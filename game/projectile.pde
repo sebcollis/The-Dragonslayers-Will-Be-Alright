@@ -2,6 +2,8 @@ class projectile{
   float x;
   float y;
   boolean exploding;
+  PVector velocity = new PVector(1, 0.0002);
+  float gravity = 0.0009;
   
   projectile(float x, float y){
     this.x = x;
@@ -15,7 +17,12 @@ class projectile{
   
   void explode() { this.exploding = true; }
   
-  void drawProjectile() { rect(x, y, 100, 100); }
+  void drawProjectile() {
+    proj.moveX(proj.getX() - velocity.x);
+    proj.moveY(proj.getY() + velocity.y);
+    velocity.y += gravity;
+    if (exploding == true){}
+    else { rect(x, y, 10, 10); } }
   
   float getX() { return this.x; }
   
