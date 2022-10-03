@@ -1,5 +1,5 @@
-Player player;
-Char dragon;
+player player;
+dragon dragon;
 projectile proj;
 Boolean playerAttack = false;
 Boolean dragonAttack = false;
@@ -8,8 +8,8 @@ void setup(){
   size(500, 300);
   frameRate(60);
   background(0);
-  player = new Player("player", 10, 275, 20);
-  dragon = new Char("dragon", 400, 205, 90);
+  player = new player("player", 10, 275, 20);
+  dragon = new dragon("alduin", 400, 205, 90);
 }
 
 void draw(){
@@ -17,7 +17,7 @@ void draw(){
   player.drawChar();
   dragon.drawChar();
   
-  isDragonAttacking();
+  dragon.isDragonAttacking();
   checkCharCollision(dragon, player);
   
 }
@@ -57,26 +57,19 @@ void movementControl(String action){
   }
 }
 
-void isDragonAttacking(){ //is he?
-  if (!dragonAttack) {
-    if (random(5) > 4.9){ 
-      dragonAttack = true;
-      proj = new projectile(dragon.getX(), dragon.getY());
-    }
-  }
-  else {
-    proj.drawProjectile();
-    checkProjCollision(proj, player);
-  }
-}
-
-void checkCharCollision(Char one, Player two){
+void checkCharCollision(dragon one, player two){
   if (one.getX() - two.getX() + 5 < 30){
     if(player.attacking == true) { print("Player attacked dragon!"); } }
   }
   
-void checkProjCollision(projectile one, Player two){
-  if (one.getX() - two.getX() + 5 < 10 && two.getY() - one.getY() + 5 < 10){
+void checkProjCollision(projectile one, player two){
+  if (one.getY() + 5 >= 295) { 
+    if(dragonAttack == true) { 
+      one.explode();
+      print("Ground hit by projectile!"); }
+      dragonAttack = false;
+    }
+  if (one.getX() - two.getX() + 5 < 30 && two.getY() - one.getY() + 5 < 30){
     if(dragonAttack == true) { 
       one.explode();
       print("Player hit by projectile!"); }

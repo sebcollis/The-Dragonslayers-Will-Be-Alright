@@ -3,11 +3,12 @@ class projectile{
   float y;
   boolean exploding;
   PVector velocity = new PVector(1, 0.0002);
-  float gravity = 0.0009;
+  float gravity;
   
-  projectile(float x, float y){
+  projectile(float x, float y, float grav){
     this.x = x;
     this.y = y;
+    this.gravity = grav;
     this.exploding = false;
   }
   

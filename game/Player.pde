@@ -1,4 +1,4 @@
-class Player{
+class player{
   String name;
   float x;
   float y;
@@ -13,7 +13,7 @@ class Player{
   float gravity = 9.8;
   float jumpHeight = 200;
   
-  Player(String name, float x, float y, float size){
+  player(String name, float x, float y, float size){
     this.name = name;
     this.x = x;
     this.y = y;
