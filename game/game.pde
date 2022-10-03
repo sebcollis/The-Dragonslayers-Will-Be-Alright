@@ -76,7 +76,7 @@ void checkCharCollision(Char one, Player two){
   }
   
 void checkProjCollision(projectile one, Player two){
-  if (one.getX() - two.getX() + 5 < 30 && two.getY() - one.getY() + 5 < 30){
+  if (one.getX() - two.getX() + 5 < 10 && two.getY() - one.getY() + 5 < 10){
     if(dragonAttack == true) { 
       one.explode();
       print("Player hit by projectile!"); }
