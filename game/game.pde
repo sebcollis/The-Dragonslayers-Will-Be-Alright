@@ -1,15 +1,14 @@
 player player;
 dragon dragon;
 projectile proj;
-Boolean playerAttack = false;
-Boolean dragonAttack = false;
+ArrayList<String> combos = new ArrayList<String>();
 
 void setup(){
   size(500, 300);
   frameRate(60);
   background(0);
   player = new player("player", 10, 275, 20);
-  dragon = new dragon("alduin", 400, 205, 90);
+  dragon = new dragon("tim", 400, 205, 90);
 }
 
 void draw(){
@@ -23,56 +22,74 @@ void draw(){
 }
 
 void keyPressed() {
-  if (key == 97){ //ascii a
+  if (key == 'a'){
     movementControl("left");
     }
-  else if (key == 100){ //ascii d
+  else if (key == 'd'){
     movementControl("right");
     }
-  else if (key == 107){ //ascii k
-    movementControl("attack");
-    }
-   else if (key == 101) { //ascii e
+   else if (key == ' ') {
      movementControl("jump");
+   }
+   else if (key == CODED){
+     if (keyCode == LEFT) { attackCombo("left"); }
+     else if (keyCode == RIGHT) { attackCombo("right"); }
+     else if (keyCode == UP) { attackCombo("up"); }
+     else if (keyCode == DOWN) { attackCombo("down"); }
    }
   }
 void keyReleased() { movementControl("stop"); }
   
 void movementControl(String action){
   if (action.equals("left")){ 
-    player.left = true; 
-    player.right = false;
-    player.moving = true;
+    player.state = animState.moveLeft;
   }
   if (action.equals("right")){ 
-    player.right = true;
-    player.left = false;
-    player.moving = true;
+    player.state = animState.moveRight;
   }
-  if (action.equals("jump")) { player.jumping = true; }
-  if (action.equals("attack")){ player.attacking = true;}
+  if (action.equals("jump")) { player.state = animState.jump; }
   if (action.equals("stop")){
-      player.moving = false;
-      player.attacking = false;
+      player.state = animState.idleLeft;
   }
 }
 
+void attackCombo(String attack){
+  int count = 0;
+  if (combos.isEmpty()){
+    combos.add(attack);
+    count = millis() + 3000;
+  }
+  else {
+    combos.add(attack);
+    if (millis() >= count){ 
+      processAttack(combos);
+      println(combos); 
+      combos = new ArrayList<String>();
+    }
+  }
+}
+
+void processAttack(ArrayList<String> combos){  
+  if (combos.size() == 0) { player.attack = attackState.noAttack; }
+  else if (combos.size() == 2) { player.attack = attackState.basicAttack; }
+}
+
 void checkCharCollision(dragon one, player two){
-  if (one.getX() - two.getX() + 5 < 30){
-    if(player.attacking == true) { print("Player attacked dragon!"); } }
+  if (one.getX() - two.getX() < 30){
+    if(player.attack != attackState.noAttack) { print("Player attacked dragon!"); } }
   }
   
 void checkProjCollision(projectile one, player two){
   if (one.getY() + 5 >= 295) { 
-    if(dragonAttack == true) { 
+    if(dragon.attack == true) { 
       one.explode();
       print("Ground hit by projectile!"); }
-      dragonAttack = false;
+      dragon.attack = false;
     }
   if (one.getX() - two.getX() + 5 < 30 && two.getY() - one.getY() + 5 < 30){
-    if(dragonAttack == true) { 
+    if(dragon.attack == true) { 
       one.explode();
       print("Player hit by projectile!"); }
-      dragonAttack = false;
+      dragon.attack = false;
     }
 }
