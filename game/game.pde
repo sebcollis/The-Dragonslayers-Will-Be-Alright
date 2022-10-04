@@ -1,20 +1,28 @@
 player player;
 dragon dragon;
 projectile proj;
+background bg;
 ArrayList<String> combos = new ArrayList<String>();
 
 void setup(){
-  size(500, 300);
-  frameRate(60);
+  size(1040, 480);
+  frameRate(30);
   background(0);
-  player = new player("player", 10, 275, 20);
-  dragon = new dragon("tim", 400, 205, 90);
+  player = new player("player", 10, 425, 100, 20);
+  dragon = new dragon("tim", 780, 215, 250, 50);
+  bg = new background("tim");
 }
 
 void draw(){
-  background(0);
+  bg.drawBackground();
   player.drawChar();
   dragon.drawChar();
+  
+  //dragon health bar
+  rect(270, 30, dragon.health * 3, 10);
+  
+  //player health bar
+  rect(20, 30, player.health * 3, 10);
   
   dragon.isDragonAttacking();
   checkCharCollision(dragon, player);
@@ -54,13 +62,14 @@ void movementControl(String action){
 }
 
 void attackCombo(String attack){
-  int count = 0;
+  int count = millis();
   if (combos.isEmpty()){
-    combos.add(attack);
+    count = 0;
+    if (!attack.equals("null")){ combos.add(attack); }
     count = millis() + 3000;
   }
-  else {
-    combos.add(attack);
+  else{
+    if (!attack.equals("null")){ combos.add(attack); }
     if (millis() >= count){ 
       processAttack(combos);
       println(combos); 
@@ -76,20 +85,26 @@ void processAttack(ArrayList<String> combos){
 
 void checkCharCollision(dragon one, player two){
   if (one.getX() - two.getX() < 30){
-    if(player.attack != attackState.noAttack) { print("Player attacked dragon!"); } }
+    if(player.attack != attackState.noAttack) { 
+      print("Player attacked dragon!");
+      dragon.deductHealth(5);
+    } 
   }
+}
   
 void checkProjCollision(projectile one, player two){
-  if (one.getY() + 5 >= 295) { 
+  if (one.getY() + 5 >= 465) { 
     if(dragon.attack == true) { 
       one.explode();
       print("Ground hit by projectile!"); }
       dragon.attack = false;
     }
-  if (one.getX() - two.getX() + 5 < 30 && two.getY() - one.getY() + 5 < 30){
+  if (one.getX() - two.getX() + player.velocity.x < player.size && one.getX() - two.getX() + player.velocity.x > 0 && two.getY() - one.getY() + player.velocity.x < player.size){
     if(dragon.attack == true) { 
       one.explode();
-      print("Player hit by projectile!"); }
-      dragon.attack = false;
+      print("Player hit by projectile!");
+      player.deductHealth(5); 
     }
+     dragon.attack = false;
+  }
 }

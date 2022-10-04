@@ -23,7 +23,7 @@ class projectile{
     proj.moveY(proj.getY() + velocity.y);
     velocity.y += gravity;
     if (exploding == true){}
-    else { rect(x, y, 10, 10); } }
+    else { rect(x, y, 20, 10); } }
   
   float getX() { return this.x; }
   

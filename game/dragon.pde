@@ -3,13 +3,15 @@ class dragon{
   float x;
   float y;
   float size;
+  float health;
   Boolean attack;
   
-  dragon(String name, float x, float y, float size){
+  dragon(String name, float x, float y, float size, float health){
     this.name = name;
     this.x = x;
     this.y = y;
     this.size = size;
+    this.health = health;
     this.attack = false;
   }
   
@@ -17,7 +19,14 @@ class dragon{
   
   void moveY(float newY) { this.y = newY; }
   
-  void drawChar() { rect(x, y, size, size); }
+  void deductHealth(float deduction){this.health -= deduction; }
+  
+  void drawChar() { 
+    //checking dragon isnt dead
+    if (this.health <= 0){ return; }
+    
+    rect(x, y, size, size); 
+  }
   
   void isDragonAttacking(){ 
     if (!attack) {
@@ -38,11 +47,22 @@ class dragon{
   void attack() {
     float grav = 0;
     float rand = random(3);
-    if ((rand < 1)) { grav = 0.003; }
-    if ((rand < 2 && rand >= 1)) { grav = 0.007; }
-    if ((rand < 3 && rand >= 2)) { grav = 0.0009; }
-    attack = true;
-    proj = new projectile(dragon.getX(), dragon.getY(), grav);
+    if (rand >= 2.9){
+      specialAttack();
+    }
+    else{
+      if ((rand < 1)) { grav = 0.003; }
+      if ((rand < 2 && rand >= 1)) { grav = 0.007; }
+      if ((rand < 2.9 && rand >= 2)) { grav = 0.0009; }
+      attack = true;
+      proj = new projectile(dragon.getX(), dragon.getY(), grav);
+    }
+  }
+  
+  void specialAttack(){
+    player.moveX(player.getX() - 40);
+    player.deductHealth(10);
+    println("Special Attack");
   }
   
   float getX() { return this.x; }
