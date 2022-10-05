@@ -23,12 +23,18 @@ class dragon{
   
   void moveY(float newY) { this.y = newY; }
   
-  void deductHealth(float deduction){this.health -= deduction; }
+  void deductHealth(float deduction){  
+    this.health -= deduction; 
+    if (this.health < 0){ this.health = 0; }
+  }
   
-  void drawChar() { 
-    //checking dragon isnt dead
-    if (this.health <= 0){ return; }
-    
+  //is the dragon dead?
+  Boolean isDragonDead(){
+    if (this.health <= 0){ return true; }
+    else { return false; }
+  }
+  
+  void drawChar() {  
     rect(x, y, size, size); 
   }
   

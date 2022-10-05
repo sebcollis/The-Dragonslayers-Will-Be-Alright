@@ -48,7 +48,7 @@ class player{
   void drawChar() { 
     
     //checking collision w/ walls and floor
-    if (this.pos.x <= 1) { this.pos.x = 2; }
+    if (this.pos.x <= 10) { this.pos.x = 10; }
     if (this.pos.x >= 1040 - size) { this.pos.x = 1040 - size - 1; }
     if (this.pos.y <= 1) { this.pos.y = 2; }
     if (this.pos.y >= 480 - size) { this.pos.y = 480 - size - 15;}
@@ -96,7 +96,7 @@ class player{
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
-      image(frame, this.pos.y, this.pos.y); //draw the sprite
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
     }
     
     if(state == animState.moveRight){

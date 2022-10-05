@@ -1,5 +1,5 @@
 enum gameState {
-    playerSelect, dragonSelect, dragonConfirm, gamePlay, dead
+    startScreen, playerSelect, dragonSelect, dragonConfirm, gamePlay, dead, win
   };
 gameState state; //initialised in setup method
 player player;
@@ -30,6 +30,7 @@ void setup(){
 void draw(){
   if (state == gameState.dragonSelect || state == gameState.dragonConfirm) { dragonSelect(); }
   else if (state == gameState.dead){ playerDead(); }
+  else if (state == gameState.win) { playerWin(); }
   else if (state == gameState.gamePlay){
     bg.drawBackground();
     player.drawChar();
@@ -44,6 +45,8 @@ void draw(){
     checkCharCollision(dragon, player);
     Boolean dead = player.isPlayerDead();
     if (dead == true){ state = gameState.dead; }
+    Boolean deadDragon = dragon.isDragonDead();
+    if (deadDragon == true){ state = gameState.win; }
   }
   
 }
@@ -85,6 +88,12 @@ void dragonSelect(){
 
 void playerDead(){
   print("oopsy whoopsy");
+  player = new player("player", 56, 425, 231, 20);
+  state = gameState.dragonSelect;
+}
+
+void playerWin(){
+  print("huzzah!");
   player = new player("player", 56, 425, 231, 20);
   state = gameState.dragonSelect;
 }
