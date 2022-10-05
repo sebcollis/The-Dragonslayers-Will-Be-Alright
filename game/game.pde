@@ -8,7 +8,7 @@ void setup(){
   size(1040, 480);
   frameRate(30);
   background(0);
-  player = new player("player", 10, 425, 100, 20);
+  player = new player("player", 10, 425, 231, 20);
   dragon = new dragon("tim", 780, 215, 250, 50);
   bg = new background("tim");
 }
@@ -57,7 +57,8 @@ void movementControl(String action){
   }
   if (action.equals("jump")) { player.state = animState.jump; }
   if (action.equals("stop")){
-      player.state = animState.idleLeft;
+      if (player.state == animState.moveLeft){ player.state = animState.idleLeft; }
+      else if (player.state == animState.moveRight){ player.state = animState.idleRight; }
   }
 }
 
