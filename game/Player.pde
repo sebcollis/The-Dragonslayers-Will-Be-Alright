@@ -35,11 +35,17 @@ class player{
   //modify y value
   void moveY(float newY){ this.pos.y = newY; }
   //modify health
-  void deductHealth(float deduction){this.health -= deduction; }
+  void deductHealth(float deduction){  
+    this.health -= deduction; 
+    if (this.health < 0){ this.health = 0; }
+  }
+  //is the player dead?
+  Boolean isPlayerDead(){
+    if (this.health <= 0){ return true; }
+    else { return false; }
+  }
   
   void drawChar() { 
-    //checking player isnt dead
-    if (this.health <= 0){ return; }
     
     //checking collision w/ walls and floor
     if (this.pos.x <= 1) { this.pos.x = 2; }
@@ -48,18 +54,18 @@ class player{
     if (this.pos.y >= 480 - size) { this.pos.y = 480 - size - 15;}
     
     //checking collision w/ dragon
-    if (740 - this.getX() + velocity.x < 20){ this.pos.x = 740 - size + velocity.x; }
+    if (740 - this.pos.x + velocity.x < 20){ this.pos.x = 740 - size + velocity.x; }
     
     //movement
     if (state == animState.moveLeft){ moveX(this.pos.x - velocity.x); }
     if (state == animState.moveRight){ moveX(this.pos.x + velocity.x); }
     if (state == animState.jump){ 
-      if (this.getY() + velocity.y > 466) { //making sure player doesn't clip through the floor
+      if (this.pos.y + velocity.y > 466) { //making sure player doesn't clip through the floor
         state = animState.idleLeft;
         velocity.y = -20;
       }
       else {
-      moveY(this.getY() + velocity.y); 
+      moveY(this.pos.y + velocity.y); 
       velocity.y += gravity; //yay physics
       }
     }
@@ -72,7 +78,7 @@ class player{
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
-      image(frame, this.getX(), this.getY()); //draw the sprite
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
     }
     if(state == animState.idleRight){
       if (frameCount % 2 == 0){ //prevents animation playing too fast
@@ -81,7 +87,7 @@ class player{
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
-      image(frame, this.getX(), this.getY()); //draw the sprite
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
     }
     if(state == animState.moveLeft){
       if (frameCount % 2 == 0){ //prevents animation playing too fast
@@ -90,7 +96,7 @@ class player{
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
-      image(frame, this.getX(), this.getY()); //draw the sprite
+      image(frame, this.pos.y, this.pos.y); //draw the sprite
     }
     
     if(state == animState.moveRight){
@@ -100,20 +106,13 @@ class player{
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
-      image(frame, this.getX(), this.getY()); //draw the sprite
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
     }
     
     else{  }
  
 }
 
-//getters
-
-  float getX() { return this.pos.x; }
-  
-  float getY() { return this.pos.y; }
-  
-  
   //abandon hope all ye who enter here
   void initialiseSprites(){
     PImage idleLeft = loadImage("seb_idle_left.png");
@@ -135,7 +134,5 @@ class player{
       x = x + 224;
     }
   }
-  
-  //oh? you thought the previous method was messy and inefficient? thats cute.
-  
+   
 }

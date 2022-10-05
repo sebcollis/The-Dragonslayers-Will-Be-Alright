@@ -18,16 +18,26 @@ class background{
     
     this.backgroundDecor = loadImage("backgroundDecor.png");
     
-    if (dragon.equals("tim")){
+    if (dragon.equals("balagos")){
       background1 = loadImage("l0_volcano1.png");
       background2 = loadImage("l1_volcano1.png");
       background3 = loadImage("l2_volcano1.png");
+    }
+    else if (dragon.equals("iymrith")){
+      background1 = loadImage("l0_beach.png");
+      background2 = loadImage("l1_beach.png");
+      background3 = loadImage("l2_beach.png");
+    }
+    else if (dragon.equals("arngalor")){
+      background1 = loadImage("l0_swamp.png");
+      background2 = loadImage("l1_swamp.png");
+      background3 = loadImage("l2_swamp.png");
+    }
 
     }
-  }
   
   void drawBackground(){
-      backgroundCamera.x = player.getX() + player.velocity.x;
+      backgroundCamera.x = player.pos.x + player.velocity.x;
       image(background1, parallaxCalc(background1Pos.x, background1Pos.z) , background1Pos.y);
       image(background2, parallaxCalc(background2Pos.x, background2Pos.z) , background2Pos.y);
       image(background3, parallaxCalc(background3Pos.x, background3Pos.z) , background3Pos.y);

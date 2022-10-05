@@ -1,55 +1,94 @@
+enum gameState {
+    playerSelect, dragonSelect, dragonConfirm, gamePlay, dead
+  };
+gameState state; //initialised in setup method
 player player;
-dragon dragon;
+dragon dragon; //initialised in the dragonSelect method
 projectile proj;
 background bg;
 PImage playerIcon;
+int menuNavigationIndex;
 ArrayList<String> combos = new ArrayList<String>();
+ArrayList<String> characters = new ArrayList<String>();
+ArrayList<String> dragons = new ArrayList<String>();
+
 
 void setup(){
   size(1040, 480);
   frameRate(30);
   background(0);
-  player = new player("player", 30, 425, 231, 20);
-  dragon = new dragon("tim", 780, 215, 250, 50);
-  bg = new background("tim", "player");
+  state = gameState.dragonSelect;
+  player = new player("player", 56, 425, 231, 20);
+  dragons.add("balagos");
+  dragons.add("iymrith");
+  dragons.add("arngalor");
+  menuNavigationIndex = 0;
   this.playerIcon = loadImage("seb_icon.png");
 
 }
 
 void draw(){
-  bg.drawBackground();
-  player.drawChar();
-  dragon.drawChar();
-  image(playerIcon, 60 + (player.health * 14), 50);
+  if (state == gameState.dragonSelect || state == gameState.dragonConfirm) { dragonSelect(); }
+  else if (state == gameState.dead){ playerDead(); }
+  else if (state == gameState.gamePlay){
+    bg.drawBackground();
+    player.drawChar();
+    dragon.drawChar();
+    image(playerIcon, 67 + (player.health * 13), 39); //players icon on the health bar
 
   
   //dragon health bar
   //rect(270, 30, dragon.health * 3, 10);
   
-  dragon.isDragonAttacking();
-  checkCharCollision(dragon, player);
+    dragon.isDragonAttacking();
+    checkCharCollision(dragon, player);
+    Boolean dead = player.isPlayerDead();
+    if (dead == true){ state = gameState.dead; }
+  }
   
 }
 
 void keyPressed() {
-  if (key == 'a'){
-    movementControl("left");
+   if (key == 'a'){ movementControl("left"); }
+   else if (key == 'd'){ movementControl("right"); }
+   else if (key == ' ') { //SPACE
+      if (state == gameState.dragonSelect){ state = gameState.dragonConfirm; }
+      else if (state == gameState.gamePlay){ movementControl("jump"); }
     }
-  else if (key == 'd'){
-    movementControl("right");
-    }
-   else if (key == ' ') {
-     movementControl("jump");
-   }
-   else if (key == CODED){
-     if (keyCode == LEFT) { attackCombo("left"); }
-     else if (keyCode == RIGHT) { attackCombo("right"); }
-     else if (keyCode == UP) { attackCombo("up"); }
-     else if (keyCode == DOWN) { attackCombo("down"); }
-   }
-  }
+    else if (key == CODED){
+      if (keyCode == LEFT) { 
+         if (state == gameState.dragonSelect){ menuNavigationIndex -= 1; }
+         else if (state == gameState.gamePlay){ attackCombo("left"); }
+       }
+       else if (keyCode == RIGHT) { 
+         if (state == gameState.dragonSelect){ menuNavigationIndex -= 1; }
+         else if (state == gameState.gamePlay){ attackCombo("right"); }
+       }
+       else if (keyCode == UP) { attackCombo("up"); }
+       else if (keyCode == DOWN) { attackCombo("down"); }
+     }
+ }
 void keyReleased() { movementControl("stop"); }
-  
+
+void dragonSelect(){
+  String name;
+  if (menuNavigationIndex >= dragons.size()){ menuNavigationIndex = 0; }
+  else if (menuNavigationIndex < 0){ menuNavigationIndex = dragons.size() - 1; }
+    if (state == gameState.dragonConfirm) { 
+      name = dragons.get(menuNavigationIndex);
+      dragon = new dragon(name, 780, 215, 250);
+      bg = new background(name, "player");
+      menuNavigationIndex = 0;
+      state = gameState.gamePlay;
+    }
+}
+
+void playerDead(){
+  print("oopsy whoopsy");
+  player = new player("player", 56, 425, 231, 20);
+  state = gameState.dragonSelect;
+}
+
 void movementControl(String action){
   if (action.equals("left")){ 
     player.state = animState.moveLeft;
@@ -87,7 +126,7 @@ void processAttack(ArrayList<String> combos){
 }
 
 void checkCharCollision(dragon one, player two){
-  if (one.getX() - two.getX() < 30){
+  if (one.getX() - two.pos.x < 30){
     if(player.attack != attackState.noAttack) { 
       print("Player attacked dragon!");
       dragon.deductHealth(5);
@@ -102,7 +141,7 @@ void checkProjCollision(projectile one, player two){
       print("Ground hit by projectile!"); }
       dragon.attack = false;
     }
-  if (one.getX() - two.getX() + player.velocity.x < player.size && one.getX() - two.getX() + player.velocity.x > 0 && two.getY() - one.getY() + player.velocity.x < player.size){
+  if (one.getX() - two.pos.x + player.velocity.x < player.size && one.getX() - two.pos.x + player.velocity.x > 0 && two.pos.x - one.getY() + player.velocity.x < player.size){
     if(dragon.attack == true) { 
       one.explode();
       print("Player hit by projectile!");

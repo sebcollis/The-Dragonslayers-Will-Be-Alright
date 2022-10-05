@@ -6,13 +6,17 @@ class dragon{
   float health;
   Boolean attack;
   
-  dragon(String name, float x, float y, float size, float health){
+  dragon(String name, float x, float y, float size){
     this.name = name;
     this.x = x;
     this.y = y;
     this.size = size;
-    this.health = health;
     this.attack = false;
+    
+    if (name == "balagos"){ health = 50; }
+    else if (name == "iymrith"){ health = 100; }
+    else if (name == "arngalor"){ health = 200; }
+      
   }
   
   void moveX(float newX){ this.x = newX; }
@@ -31,11 +35,11 @@ class dragon{
   void isDragonAttacking(){ 
     if (!attack) {
       float rand = random(5);
-      if (this.name.equals("alduin")){ //ez difficulty  
+      if (this.name.equals("balagos")){ //ez difficulty  
         if (rand > 4.99){ attack(); } }
-      if (this.name.equals("throckmorton")){ //medium difficulty  
+      if (this.name.equals("iymrith")){ //medium difficulty  
         if (rand > 4.6){ attack(); } }
-      if (this.name.equals("tim")){ //hard difficulty  
+      if (this.name.equals("arngalor")){ //hard difficulty  
         if (rand > 4){ attack(); } }
     }
   else {
@@ -60,8 +64,8 @@ class dragon{
   }
   
   void specialAttack(){
-    player.moveX(player.getX() - 40);
-    player.deductHealth(10);
+    player.moveX(player.pos.x - 40);
+    player.deductHealth(5);
     println("Special Attack");
   }
   
