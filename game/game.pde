@@ -2,27 +2,29 @@ player player;
 dragon dragon;
 projectile proj;
 background bg;
+PImage playerIcon;
 ArrayList<String> combos = new ArrayList<String>();
 
 void setup(){
   size(1040, 480);
   frameRate(30);
   background(0);
-  player = new player("player", 10, 425, 231, 20);
+  player = new player("player", 30, 425, 231, 20);
   dragon = new dragon("tim", 780, 215, 250, 50);
-  bg = new background("tim");
+  bg = new background("tim", "player");
+  this.playerIcon = loadImage("seb_icon.png");
+
 }
 
 void draw(){
   bg.drawBackground();
   player.drawChar();
   dragon.drawChar();
+  image(playerIcon, 60 + (player.health * 14), 50);
+
   
   //dragon health bar
-  rect(270, 30, dragon.health * 3, 10);
-  
-  //player health bar
-  rect(20, 30, player.health * 3, 10);
+  //rect(270, 30, dragon.health * 3, 10);
   
   dragon.isDragonAttacking();
   checkCharCollision(dragon, player);

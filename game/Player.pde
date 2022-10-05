@@ -85,8 +85,8 @@ class player{
     }
     if(state == animState.moveLeft){
       if (frameCount % 2 == 0){ //prevents animation playing too fast
-        if (frameIndex < 10 || frameIndex > 15){ frameIndex = 10; } //makes sure index isnt out of range
-        else if (frameIndex == 15){ frameIndex = 10; } //wraps around to the start of the animation
+        if (frameIndex < 10 || frameIndex > 16){ frameIndex = 10; } //makes sure index isnt out of range
+        else if (frameIndex == 16){ frameIndex = 10; } //wraps around to the start of the animation
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
@@ -95,8 +95,8 @@ class player{
     
     if(state == animState.moveRight){
       if (frameCount % 2 == 0){ //prevents animation playing too fast
-        if (frameIndex < 17 || frameIndex > 21){ frameIndex = 17; } //makes sure index isnt out of range
-        else if (frameIndex == 21){ frameIndex = 17; } //wraps around to the start of the animation
+        if (frameIndex < 17 || frameIndex > 22){ frameIndex = 17; } //makes sure index isnt out of range
+        else if (frameIndex == 22){ frameIndex = 17; } //wraps around to the start of the animation
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
@@ -126,8 +126,12 @@ class player{
     for(int i = 0; i < 5; i++){
       sprites[i] = idleLeft.get(x, y, 224, 224); //left idle = sprite collection index 0-4
       sprites[i+5] = idleRight.get(x, y, 224, 224); //right idle = sprite collection index 5-9
+      x = x + 224;
+    }
+    x = 0;
+    for(int i = 0; i < 7; i++){
       sprites[i+10] = runLeft.get(x, y, 224, 224); //left run= sprite collection index 10-16
-      sprites[i+17] = runRight.get(x, y, 224, 224); //right idle = sprite collection index 16-22
+      sprites[i+17] = runRight.get(x, y, 224, 224); //right idle = sprite collection index 17-22
       x = x + 224;
     }
   }
