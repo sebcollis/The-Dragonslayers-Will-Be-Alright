@@ -60,6 +60,7 @@ void keyPressed() {
        if (state == gameState.titleScreen){ state = gameState.dragonSelect; }
       else if (state == gameState.dragonSelect){ state = gameState.dragonConfirm; }
       else if (state == gameState.gamePlay){ movementControl("jump"); }
+      else if(state == gameState.dead || state == gameState.win ) { state = gameState.dragonSelect; }
     }
     else if (key == CODED){
       if (keyCode == LEFT) { 
@@ -91,13 +92,12 @@ void dragonSelect(){
 }
 
 void playerDead(){
-  print("oopsy whoopsy");
+  bg.lose();
   player = new player("player", 56, 425, 231, 20);
-  state = gameState.dragonSelect;
 }
 
 void playerWin(){
-  print("huzzah!");
+  bg.win();
   player = new player("player", 56, 425, 231, 20);
   state = gameState.dragonSelect;
 }

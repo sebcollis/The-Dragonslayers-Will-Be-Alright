@@ -11,6 +11,8 @@ class background{
   PImage dragonSelect1;
   PImage dragonSelect2;
   PImage dragonSelect3;
+  PImage win;
+  PImage lose;
   PImage[] dragonSelect = new PImage[3];
   String dragon;
 
@@ -23,6 +25,8 @@ class background{
     
     this.backgroundDecor = loadImage("backgroundDecor.png");
     this.titleScreen = loadImage("title.png");
+    this.win = loadImage("win.png");
+    this.lose = loadImage("lose.png");
     
     dragonSelect1 = loadImage("select_balagos.png");
     dragonSelect2 = loadImage("select_iymrith.png");
@@ -57,14 +61,15 @@ class background{
       image(backgroundDecor, 0, 0);
   }
   
-  void drawTitleScreen(){
-    image(titleScreen, 0, 0);
-  }
+  void drawTitleScreen(){ image(titleScreen, 0, 0); }
   
   void selectDragon(int index){
     image(dragonSelect[index], 0, 0);
   }
   
+  void win(){ image(win, 0, 0); }
+  
+  void lose(){ image(lose, 0, 0); }
   
   float parallaxCalc(float x, float z){ return((x-backgroundCamera.x) / z); }
 
