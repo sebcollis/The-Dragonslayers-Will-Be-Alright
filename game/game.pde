@@ -1,5 +1,5 @@
 enum gameState {
-    startScreen, playerSelect, dragonSelect, dragonConfirm, gamePlay, dead, win
+    titleScreen, playerSelect, dragonSelect, dragonConfirm, gamePlay, dead, win
   };
 gameState state; //initialised in setup method
 player player;
@@ -17,8 +17,9 @@ void setup(){
   size(1040, 480);
   frameRate(30);
   background(0);
-  state = gameState.dragonSelect;
+  state = gameState.titleScreen;
   player = new player("player", 56, 425, 231, 20);
+  bg = new background("null", "player");
   dragons.add("balagos");
   dragons.add("iymrith");
   dragons.add("arngalor");
@@ -28,7 +29,8 @@ void setup(){
 }
 
 void draw(){
-  if (state == gameState.dragonSelect || state == gameState.dragonConfirm) { dragonSelect(); }
+  if (state == gameState.titleScreen){ bg.drawTitleScreen(); }
+  else if (state == gameState.dragonSelect || state == gameState.dragonConfirm) { dragonSelect(); }
   else if (state == gameState.dead){ playerDead(); }
   else if (state == gameState.win) { playerWin(); }
   else if (state == gameState.gamePlay){
@@ -55,7 +57,8 @@ void keyPressed() {
    if (key == 'a'){ movementControl("left"); }
    else if (key == 'd'){ movementControl("right"); }
    else if (key == ' ') { //SPACE
-      if (state == gameState.dragonSelect){ state = gameState.dragonConfirm; }
+       if (state == gameState.titleScreen){ state = gameState.dragonSelect; }
+      else if (state == gameState.dragonSelect){ state = gameState.dragonConfirm; }
       else if (state == gameState.gamePlay){ movementControl("jump"); }
     }
     else if (key == CODED){
@@ -64,7 +67,7 @@ void keyPressed() {
          else if (state == gameState.gamePlay){ attackCombo("left"); }
        }
        else if (keyCode == RIGHT) { 
-         if (state == gameState.dragonSelect){ menuNavigationIndex -= 1; }
+         if (state == gameState.dragonSelect){ menuNavigationIndex += 1; }
          else if (state == gameState.gamePlay){ attackCombo("right"); }
        }
        else if (keyCode == UP) { attackCombo("up"); }
@@ -77,12 +80,13 @@ void dragonSelect(){
   String name;
   if (menuNavigationIndex >= dragons.size()){ menuNavigationIndex = 0; }
   else if (menuNavigationIndex < 0){ menuNavigationIndex = dragons.size() - 1; }
-    if (state == gameState.dragonConfirm) { 
-      name = dragons.get(menuNavigationIndex);
-      dragon = new dragon(name, 780, 215, 250);
-      bg = new background(name, "player");
-      menuNavigationIndex = 0;
-      state = gameState.gamePlay;
+  bg.selectDragon(menuNavigationIndex);
+  if (state == gameState.dragonConfirm) { 
+    name = dragons.get(menuNavigationIndex);
+    dragon = new dragon(name, 780, 215, 250);
+    bg = new background(name, "player");
+    menuNavigationIndex = 0;
+    state = gameState.gamePlay;
     }
 }
 

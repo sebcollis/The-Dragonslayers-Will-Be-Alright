@@ -7,6 +7,11 @@ class background{
   PImage background2;
   PImage background3;
   PImage backgroundDecor;
+  PImage titleScreen;
+  PImage dragonSelect1;
+  PImage dragonSelect2;
+  PImage dragonSelect3;
+  PImage[] dragonSelect = new PImage[3];
   String dragon;
 
   background(String dragon, String player){
@@ -17,6 +22,14 @@ class background{
     this.background3Pos = new PVector(0, 0, 1);
     
     this.backgroundDecor = loadImage("backgroundDecor.png");
+    this.titleScreen = loadImage("title.png");
+    
+    dragonSelect1 = loadImage("select_balagos.png");
+    dragonSelect2 = loadImage("select_iymrith.png");
+    dragonSelect3 = loadImage("select_arngalor.png");
+    dragonSelect[0] = dragonSelect1;
+    dragonSelect[1] = dragonSelect2;
+    dragonSelect[2] = dragonSelect3;
     
     if (dragon.equals("balagos")){
       background1 = loadImage("l0_volcano1.png");
@@ -34,7 +47,7 @@ class background{
       background3 = loadImage("l2_swamp.png");
     }
 
-    }
+  }
   
   void drawBackground(){
       backgroundCamera.x = player.pos.x + player.velocity.x;
@@ -42,6 +55,14 @@ class background{
       image(background2, parallaxCalc(background2Pos.x, background2Pos.z) , background2Pos.y);
       image(background3, parallaxCalc(background3Pos.x, background3Pos.z) , background3Pos.y);
       image(backgroundDecor, 0, 0);
+  }
+  
+  void drawTitleScreen(){
+    image(titleScreen, 0, 0);
+  }
+  
+  void selectDragon(int index){
+    image(dragonSelect[index], 0, 0);
   }
   
   
