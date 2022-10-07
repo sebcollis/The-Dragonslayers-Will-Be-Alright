@@ -1,17 +1,14 @@
 enum animState {
     idleLeft, idleRight, moveLeft, moveRight, jump
   };
-enum attackState {
-  noAttack, basicAttack, attackOne, attackTwo
-  };
 
 class player{
   animState state = animState.idleLeft;
-  attackState attack = attackState.noAttack;
   String name;
   PVector pos = new PVector(0, 0);
   float size;
   float health;
+  Boolean attack;
   PVector velocity = new PVector(5, -20);
   float gravity = 9.8;
   float jumpHeight = 200;
@@ -25,6 +22,7 @@ class player{
     this.pos.y = y;
     this.size = size;
     this.health = health;
+    this.attack = false;
     
     initialiseSprites();
 
@@ -54,7 +52,7 @@ class player{
     if (this.pos.y >= 480 - size) { this.pos.y = 480 - size - 15;}
     
     //checking collision w/ dragon
-    if (740 - this.pos.x + velocity.x < 20){ this.pos.x = 740 - size + velocity.x; }
+    if (780 - this.pos.x + velocity.x < 20){ this.pos.x = 740 - size + velocity.x; }
     
     //movement
     if (state == animState.moveLeft){ moveX(this.pos.x - velocity.x); }

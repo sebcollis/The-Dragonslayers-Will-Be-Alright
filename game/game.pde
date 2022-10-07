@@ -8,7 +8,6 @@ projectile proj;
 background bg;
 PImage playerIcon;
 int menuNavigationIndex;
-ArrayList<String> combos = new ArrayList<String>();
 ArrayList<String> characters = new ArrayList<String>();
 ArrayList<String> dragons = new ArrayList<String>();
 
@@ -65,15 +64,12 @@ void keyPressed() {
     else if (key == CODED){
       if (keyCode == LEFT) { 
          if (state == gameState.dragonSelect){ menuNavigationIndex -= 1; }
-         else if (state == gameState.gamePlay){ attackCombo("left"); }
+         else if (state == gameState.gamePlay){ player.attack = true; }
        }
        else if (keyCode == RIGHT) { 
          if (state == gameState.dragonSelect){ menuNavigationIndex += 1; }
-         else if (state == gameState.gamePlay){ attackCombo("right"); }
        }
-       else if (keyCode == UP) { attackCombo("up"); }
-       else if (keyCode == DOWN) { attackCombo("down"); }
-     }
+    }
  }
 void keyReleased() { movementControl("stop"); }
 
@@ -84,7 +80,7 @@ void dragonSelect(){
   bg.selectDragon(menuNavigationIndex);
   if (state == gameState.dragonConfirm) { 
     name = dragons.get(menuNavigationIndex);
-    dragon = new dragon(name, 780, 215, 250);
+    dragon = new dragon(name, 680, 100, 400);
     bg = new background(name, "player");
     menuNavigationIndex = 0;
     state = gameState.gamePlay;
@@ -116,31 +112,10 @@ void movementControl(String action){
   }
 }
 
-void attackCombo(String attack){
-  int count = millis();
-  if (combos.isEmpty()){
-    count = 0;
-    if (!attack.equals("null")){ combos.add(attack); }
-    count = millis() + 3000;
-  }
-  else{
-    if (!attack.equals("null")){ combos.add(attack); }
-    if (millis() >= count){ 
-      processAttack(combos);
-      println(combos); 
-      combos = new ArrayList<String>();
-    }
-  }
-}
-
-void processAttack(ArrayList<String> combos){  
-  if (combos.size() == 0) { player.attack = attackState.noAttack; }
-  else if (combos.size() == 2) { player.attack = attackState.basicAttack; }
-}
-
 void checkCharCollision(dragon one, player two){
   if (one.getX() - two.pos.x < 30){
-    if(player.attack != attackState.noAttack) { 
+    println("E");
+    if(player.attack == true) { 
       print("Player attacked dragon!");
       dragon.deductHealth(5);
     } 

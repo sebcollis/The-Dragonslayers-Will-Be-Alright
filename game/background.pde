@@ -11,6 +11,9 @@ class background{
   PImage dragonSelect1;
   PImage dragonSelect2;
   PImage dragonSelect3;
+  PImage dragonIcon1;
+  PImage dragonIcon2;
+  PImage dragonIcon3;
   PImage win;
   PImage lose;
   PImage[] dragonSelect = new PImage[3];
@@ -27,6 +30,10 @@ class background{
     this.titleScreen = loadImage("title.png");
     this.win = loadImage("win.png");
     this.lose = loadImage("lose.png");
+    
+    dragonIcon1 = loadImage("balagos_icon_big.png");
+    dragonIcon2 = loadImage("iymrith_icon_big.png");
+    dragonIcon3 = loadImage("arngalor_icon_big.png");
     
     dragonSelect1 = loadImage("select_balagos.png");
     dragonSelect2 = loadImage("select_iymrith.png");
@@ -65,6 +72,9 @@ class background{
   
   void selectDragon(int index){
     image(dragonSelect[index], 0, 0);
+    image(dragonIcon1, 137, 182);
+    image(dragonIcon2, 393, 182);
+    image(dragonIcon3, 649, 182);
   }
   
   void win(){ image(win, 0, 0); }
