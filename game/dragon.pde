@@ -41,9 +41,11 @@ class dragon{
   
   void drawChar() {  
     if (this.attack == true){
-      if (frameIndex < 9 || frameIndex > 14){ frameIndex = 0; } //makes sure index isnt out of range
+     if (frameCount % 5 == 0){ //prevents animation playing too fast
+      if (frameIndex < 9 || frameIndex > 14){ frameIndex = 9; } //makes sure index isnt out of range
       else if (frameIndex == 14){ frameIndex = 9; } //wraps around to the start of the animation
       else { frameIndex += 1; }
+     }
       frame = sprites[frameIndex];
       image(frame, this.x, this.y); //draw the sprite
     }
@@ -62,9 +64,9 @@ class dragon{
     if (!attack) {
       float rand = random(5);
       if (this.name.equals("balagos")){ //ez difficulty  
-        if (rand > 4.99){ attack(); } }
-      if (this.name.equals("iymrith")){ //medium difficulty  
         if (rand > 4.6){ attack(); } }
+      if (this.name.equals("iymrith")){ //medium difficulty  
+        if (rand > 4.2){ attack(); } }
       if (this.name.equals("arngalor")){ //hard difficulty  
         if (rand > 4){ attack(); } }
     }
@@ -85,7 +87,7 @@ class dragon{
       if ((rand < 2 && rand >= 1)) { grav = 0.007; }
       if ((rand < 2.9 && rand >= 2)) { grav = 0.0009; }
       attack = true;
-      proj = new projectile(dragon.getX(), dragon.getY(), grav);
+      proj = new projectile(dragon.getX() + 40, dragon.getY() + 100, grav);
     }
   }
   
@@ -124,7 +126,7 @@ class dragon{
     }
     x = 0;
     for(int i = 0; i < 6; i++){
-      sprites[i+10] = attack.get(x, y, 400, 376); //attack= sprite collection index 9-14
+      sprites[i+9] = attack.get(x, y, 400, 376); //attack= sprite collection index 9-14
       x = x + 400;
     }
   }

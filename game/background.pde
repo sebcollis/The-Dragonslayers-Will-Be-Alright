@@ -14,6 +14,8 @@ class background{
   PImage dragonIcon1;
   PImage dragonIcon2;
   PImage dragonIcon3;
+  PImage dragonIconHealth;
+  PImage playerIconHealth;
   PImage win;
   PImage lose;
   PImage[] dragonSelect = new PImage[3];
@@ -30,6 +32,7 @@ class background{
     this.titleScreen = loadImage("title.png");
     this.win = loadImage("win.png");
     this.lose = loadImage("lose.png");
+    this.playerIconHealth = loadImage("seb_icon.png");
     
     dragonIcon1 = loadImage("balagos_icon_big.png");
     dragonIcon2 = loadImage("iymrith_icon_big.png");
@@ -46,26 +49,33 @@ class background{
       background1 = loadImage("l0_volcano1.png");
       background2 = loadImage("l1_volcano1.png");
       background3 = loadImage("l2_volcano1.png");
+      dragonIconHealth = loadImage("balagos_icon.png");
     }
     else if (dragon.equals("iymrith")){
       background1 = loadImage("l0_beach.png");
       background2 = loadImage("l1_beach.png");
       background3 = loadImage("l2_beach.png");
+      dragonIconHealth = loadImage("iymrith_icon.png");
     }
     else if (dragon.equals("arngalor")){
       background1 = loadImage("l0_swamp.png");
       background2 = loadImage("l1_swamp.png");
       background3 = loadImage("l2_swamp.png");
+      dragonIconHealth = loadImage("arngalor_icon.png");
     }
 
   }
   
-  void drawBackground(){
+  void drawBackground(float playerHealth, float dragonHealth){
       backgroundCamera.x = player.pos.x + player.velocity.x;
       image(background1, parallaxCalc(background1Pos.x, background1Pos.z) , background1Pos.y);
       image(background2, parallaxCalc(background2Pos.x, background2Pos.z) , background2Pos.y);
       image(background3, parallaxCalc(background3Pos.x, background3Pos.z) , background3Pos.y);
       image(backgroundDecor, 0, 0);
+      image(playerIconHealth, 67 + (playerHealth * 13), 39); //players icon on the health bar
+      if (dragon.equals("balagos")){ image(dragonIconHealth, 640 + (dragonHealth * 5.7), 39); } //dragons icon on the health bar
+      else if (dragon.equals("iymrith")){ image(dragonIconHealth, 655 + (dragonHealth * 2.7), 39); }
+      else if (dragon.equals("arngalor")){ image(dragonIconHealth, 665 + (dragonHealth * 1.3), 39); }
   }
   
   void drawTitleScreen(){ image(titleScreen, 0, 0); }

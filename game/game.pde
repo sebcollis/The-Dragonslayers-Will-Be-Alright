@@ -23,7 +23,6 @@ void setup(){
   dragons.add("iymrith");
   dragons.add("arngalor");
   menuNavigationIndex = 0;
-  this.playerIcon = loadImage("seb_icon.png");
 
 }
 
@@ -33,11 +32,9 @@ void draw(){
   else if (state == gameState.dead){ playerDead(); }
   else if (state == gameState.win) { playerWin(); }
   else if (state == gameState.gamePlay){
-    bg.drawBackground();
+    bg.drawBackground(player.health, dragon.health);
     player.drawChar();
     dragon.drawChar();
-    image(playerIcon, 67 + (player.health * 13), 39); //players icon on the health bar
-
   
   //dragon health bar
   //rect(270, 30, dragon.health * 3, 10);
@@ -55,6 +52,7 @@ void draw(){
 void keyPressed() {
    if (key == 'a'){ movementControl("left"); }
    else if (key == 'd'){ movementControl("right"); }
+   else if (key == 'e') { player.attack = true; }
    else if (key == ' ') { //SPACE
        if (state == gameState.titleScreen){ state = gameState.dragonSelect; }
       else if (state == gameState.dragonSelect){ state = gameState.dragonConfirm; }
@@ -64,7 +62,6 @@ void keyPressed() {
     else if (key == CODED){
       if (keyCode == LEFT) { 
          if (state == gameState.dragonSelect){ menuNavigationIndex -= 1; }
-         else if (state == gameState.gamePlay){ player.attack = true; }
        }
        else if (keyCode == RIGHT) { 
          if (state == gameState.dragonSelect){ menuNavigationIndex += 1; }
@@ -109,24 +106,23 @@ void movementControl(String action){
   if (action.equals("stop")){
       if (player.state == animState.moveLeft){ player.state = animState.idleLeft; }
       else if (player.state == animState.moveRight){ player.state = animState.idleRight; }
+      player.attack = false;
   }
 }
 
 void checkCharCollision(dragon one, player two){
-  if (one.getX() - two.pos.x < 30){
-    println("E");
+  if (one.getX() - two.pos.x < 0){
     if(player.attack == true) { 
-      print("Player attacked dragon!");
       dragon.deductHealth(5);
+      player.attack = false;
     } 
   }
 }
   
 void checkProjCollision(projectile one, player two){
-  if (one.getY() + 5 >= 465) { 
+  if (one.getY() + 5 >= 465) { //collision with ground
     if(dragon.attack == true) { 
       one.explode();
-      print("Ground hit by projectile!"); }
       dragon.attack = false;
     }
   if (one.getX() - two.pos.x + player.velocity.x < player.size && one.getX() - two.pos.x + player.velocity.x > 0 && two.pos.x - one.getY() + player.velocity.x < player.size){
@@ -136,5 +132,6 @@ void checkProjCollision(projectile one, player two){
       player.deductHealth(5); 
     }
      dragon.attack = false;
+  }
   }
 }

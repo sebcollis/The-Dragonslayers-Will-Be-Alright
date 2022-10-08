@@ -52,7 +52,7 @@ class player{
     if (this.pos.y >= 480 - size) { this.pos.y = 480 - size - 15;}
     
     //checking collision w/ dragon
-    if (780 - this.pos.x + velocity.x < 20){ this.pos.x = 740 - size + velocity.x; }
+    if (780 - this.pos.x + velocity.x < 60){ this.pos.x = this.pos.x - velocity.x; }
     
     //movement
     if (state == animState.moveLeft){ moveX(this.pos.x - velocity.x); }
