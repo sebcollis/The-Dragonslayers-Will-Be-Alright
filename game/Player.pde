@@ -1,5 +1,5 @@
 enum animState {
-    idleLeft, idleRight, moveLeft, moveRight, jump
+    idleLeft, idleRight, moveLeft, moveRight, jump, attacking
   };
 
 class player{
@@ -8,7 +8,6 @@ class player{
   PVector pos = new PVector(0, 0);
   float size;
   float health;
-  Boolean attack;
   PVector velocity = new PVector(5, -20);
   float gravity = 9.8;
   float jumpHeight = 200;
@@ -22,7 +21,6 @@ class player{
     this.pos.y = y;
     this.size = size;
     this.health = health;
-    this.attack = false;
     
     initialiseSprites();
 
@@ -96,7 +94,6 @@ class player{
       frame = sprites[frameIndex];
       image(frame, this.pos.x, this.pos.y); //draw the sprite
     }
-    
     if(state == animState.moveRight){
       if (frameCount % 2 == 0){ //prevents animation playing too fast
         if (frameIndex < 17 || frameIndex > 22){ frameIndex = 17; } //makes sure index isnt out of range
@@ -106,7 +103,13 @@ class player{
       frame = sprites[frameIndex];
       image(frame, this.pos.x, this.pos.y); //draw the sprite
     }
-    
+    if(state == animState.attacking){
+      if (frameIndex < 22 || frameIndex > 28){ frameIndex = 23; } //makes sure index isnt out of range
+      else if (frameIndex == 28){ frameIndex = 23; } //wraps around to the start of the animation
+      else { frameIndex += 1; }
+      frame = sprites[frameIndex];
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
+    }
     else{  }
  
 }
@@ -117,6 +120,7 @@ class player{
     PImage idleRight = loadImage("seb_idle_right.png");
     PImage runLeft = loadImage("seb_run.png");
     PImage runRight = loadImage("seb_run_right.png");
+    PImage attack = loadImage("seb_attack.png");
     
     Integer x = 0;
     Integer y = 0;
@@ -128,7 +132,8 @@ class player{
     x = 0;
     for(int i = 0; i < 7; i++){
       sprites[i+10] = runLeft.get(x, y, 224, 224); //left run= sprite collection index 10-16
-      sprites[i+17] = runRight.get(x, y, 224, 224); //right idle = sprite collection index 17-22
+      sprites[i+17] = runRight.get(x, y, 224, 224); //right run = sprite collection index 17-22
+      sprites[i + 22] = attack.get(x, y, 224, 224); //attack = sprite collection index 23-29
       x = x + 224;
     }
   }

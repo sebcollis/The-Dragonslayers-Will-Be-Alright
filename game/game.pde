@@ -52,7 +52,7 @@ void draw(){
 void keyPressed() {
    if (key == 'a'){ movementControl("left"); }
    else if (key == 'd'){ movementControl("right"); }
-   else if (key == 'e') { player.attack = true; }
+   else if (key == 'e') { player.state = animState.attacking; }
    else if (key == ' ') { //SPACE
        if (state == gameState.titleScreen){ state = gameState.dragonSelect; }
       else if (state == gameState.dragonSelect){ state = gameState.dragonConfirm; }
@@ -106,15 +106,14 @@ void movementControl(String action){
   if (action.equals("stop")){
       if (player.state == animState.moveLeft){ player.state = animState.idleLeft; }
       else if (player.state == animState.moveRight){ player.state = animState.idleRight; }
-      player.attack = false;
+      else if(player.state == animState.attacking) { player.state = animState.idleRight; }
   }
 }
 
 void checkCharCollision(dragon one, player two){
   if (one.getX() - two.pos.x < 0){
-    if(player.attack == true) { 
+    if(player.state == animState.attacking) { 
       dragon.deductHealth(5);
-      player.attack = false;
     } 
   }
 }
