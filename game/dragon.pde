@@ -83,11 +83,11 @@ class dragon{
       specialAttack();
     }
     else{
-      if ((rand < 1)) { grav = 0.003; }
-      if ((rand < 2 && rand >= 1)) { grav = 0.007; }
-      if ((rand < 2.9 && rand >= 2)) { grav = 0.0009; }
+      if ((rand < 1)) { grav = 0.3; }
+      if ((rand < 2 && rand >= 1)) { grav = 0.7; }
+      if ((rand < 2.9 && rand >= 2)) { grav = 0.09; }
       attack = true;
-      proj = new projectile(dragon.getX() + 40, dragon.getY() + 100, grav);
+      proj = new projectile(dragon.getX() + 40, dragon.getY() + 100, grav, dragon.name);
     }
   }
   

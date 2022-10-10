@@ -119,18 +119,13 @@ void checkCharCollision(dragon one, player two){
 }
   
 void checkProjCollision(projectile one, player two){
-  if (one.getY() + 5 >= 465) { //collision with ground
-    if(dragon.attack == true) { 
-      one.explode();
-      dragon.attack = false;
-    }
-  if (one.getX() - two.pos.x + player.velocity.x < player.size && one.getX() - two.pos.x + player.velocity.x > 0 && two.pos.x - one.getY() + player.velocity.x < player.size){
+  
+  if (one.getX() - two.pos.x + player.velocity.x < player.size - 50 && one.getX() - two.pos.x + player.velocity.x > 0 && two.pos.x - one.getY() + player.velocity.x < player.size){
     if(dragon.attack == true) { 
       one.explode();
       print("Player hit by projectile!");
       player.deductHealth(5); 
     }
      dragon.attack = false;
-  }
   }
 }
