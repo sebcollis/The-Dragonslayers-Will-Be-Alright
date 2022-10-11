@@ -1,5 +1,5 @@
 enum animState {
-    idleLeft, idleRight, moveLeft, moveRight, jump, attacking
+    idleLeft, idleRight, moveLeft, moveRight, jumpLeft, jumpRight, attacking
   };
 
 class player{
@@ -55,13 +55,13 @@ class player{
     //movement
     if (state == animState.moveLeft){ moveX(this.pos.x - velocity.x); }
     if (state == animState.moveRight){ moveX(this.pos.x + velocity.x); }
-    if (state == animState.jump){ 
-      if (this.pos.y + velocity.y > 466) { //making sure player doesn't clip through the floor
-        state = animState.idleLeft;
+    if (state == animState.jumpLeft || state == animState.jumpRight){ 
+      if (this.pos.y + velocity.y > 290) { //making sure player doesn't clip through the floor
+        state = animState.idleRight;
         velocity.y = -20;
       }
       else {
-      moveY(this.pos.y + velocity.y); 
+      moveY(this.pos.y + velocity.y);
       velocity.y += gravity; //yay physics
       }
     }
@@ -110,8 +110,25 @@ class player{
       frame = sprites[frameIndex];
       image(frame, this.pos.x, this.pos.y); //draw the sprite
     }
-    else{  }
- 
+    if(state == animState.jumpLeft){
+      if (frameCount % 2 == 0){ //prevents animation playing too fast
+        if (frameIndex < 30 || frameIndex > 36){ frameIndex = 30; } //makes sure index isnt out of range
+        else if (frameIndex == 36){ frameIndex = 30; } //wraps around to the start of the animation
+        else { frameIndex += 1; }
+      }
+      frame = sprites[frameIndex];
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
+    }
+    if(state == animState.jumpRight){
+      if (frameCount % 2 == 0){ //prevents animation playing too fast
+        if (frameIndex < 37 || frameIndex > 42){ frameIndex = 37; } //makes sure index isnt out of range
+        else if (frameIndex == 42){ frameIndex = 37; } //wraps around to the start of the animation
+        else { frameIndex += 1; }
+      }
+      frame = sprites[frameIndex];
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
+    }
+
 }
 
   //abandon hope all ye who enter here
@@ -121,6 +138,8 @@ class player{
     PImage runLeft = loadImage("seb_run.png");
     PImage runRight = loadImage("seb_run_right.png");
     PImage attack = loadImage("seb_attack.png");
+    PImage jumpLeft = loadImage("seb_jump_left.png");
+    PImage jumpRight = loadImage("seb_jump_right.png");
     
     Integer x = 0;
     Integer y = 0;
@@ -133,7 +152,13 @@ class player{
     for(int i = 0; i < 7; i++){
       sprites[i+10] = runLeft.get(x, y, 224, 224); //left run= sprite collection index 10-16
       sprites[i+17] = runRight.get(x, y, 224, 224); //right run = sprite collection index 17-22
-      sprites[i + 22] = attack.get(x, y, 224, 224); //attack = sprite collection index 23-29
+      sprites[i + 23] = attack.get(x, y, 224, 224); //attack = sprite collection index 23-29
+      x = x + 224;
+    }
+      x = 0;
+    for(int i = 0; i < 8; i++){
+      sprites[i+30] = jumpLeft.get(x, y, 224, 224); //left run= sprite collection index 30-36
+      sprites[i+37] = jumpRight.get(x, y, 224, 224); //right run = sprite collection index 37-42
       x = x + 224;
     }
   }

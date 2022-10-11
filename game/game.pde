@@ -49,26 +49,38 @@ void draw(){
   
 }
 
+/**
+  When a key is pressed, it controls either the player or the menu depending what state the game is in.
+**/
 void keyPressed() {
-   if (key == 'a'){ movementControl("left"); }
-   else if (key == 'd'){ movementControl("right"); }
+   if (key == 'a'){  
+     if (state == gameState.dragonSelect){ menuNavigationIndex -= 1; }
+     else if (state == gameState.gamePlay){ player.state = animState.moveLeft; }
+   }
+   else if (key == 'd'){
+     if (state == gameState.dragonSelect){ menuNavigationIndex += 1; } 
+     else if (state == gameState.gamePlay){ player.state = animState.moveRight; }
+   }
    else if (key == 'e') { player.state = animState.attacking; }
    else if (key == ' ') { //SPACE
-       if (state == gameState.titleScreen){ state = gameState.dragonSelect; }
+      if (state == gameState.titleScreen){ state = gameState.dragonSelect; }
       else if (state == gameState.dragonSelect){ state = gameState.dragonConfirm; }
-      else if (state == gameState.gamePlay){ movementControl("jump"); }
+      else if (state == gameState.gamePlay){ 
+        if (player.state == animState.moveLeft || player.state == animState.idleLeft){ player.state = animState.jumpLeft; }
+        else { player.state = animState.jumpRight; }
+      }
       else if(state == gameState.dead || state == gameState.win ) { state = gameState.dragonSelect; }
     }
-    else if (key == CODED){
-      if (keyCode == LEFT) { 
-         if (state == gameState.dragonSelect){ menuNavigationIndex -= 1; }
-       }
-       else if (keyCode == RIGHT) { 
-         if (state == gameState.dragonSelect){ menuNavigationIndex += 1; }
-       }
-    }
  }
-void keyReleased() { movementControl("stop"); }
+ 
+ /**
+  Controlling key releases to stop movement
+**/
+void keyReleased() { 
+  if (player.state == animState.moveLeft){ player.state = animState.idleLeft; }
+  else if (player.state == animState.moveRight){ player.state = animState.idleRight; }
+  else if(player.state == animState.attacking) { player.state = animState.idleRight; }
+}
 
 void dragonSelect(){
   String name;
@@ -92,22 +104,6 @@ void playerDead(){
 void playerWin(){
   bg.win();
   player = new player("player", 56, 425, 231, 20);
-  state = gameState.dragonSelect;
-}
-
-void movementControl(String action){
-  if (action.equals("left")){ 
-    player.state = animState.moveLeft;
-  }
-  if (action.equals("right")){ 
-    player.state = animState.moveRight;
-  }
-  if (action.equals("jump")) { player.state = animState.jump; }
-  if (action.equals("stop")){
-      if (player.state == animState.moveLeft){ player.state = animState.idleLeft; }
-      else if (player.state == animState.moveRight){ player.state = animState.idleRight; }
-      else if(player.state == animState.attacking) { player.state = animState.idleRight; }
-  }
 }
 
 void checkCharCollision(dragon one, player two){
@@ -121,11 +117,11 @@ void checkCharCollision(dragon one, player two){
 void checkProjCollision(projectile one, player two){
   
   if (one.getX() - two.pos.x + player.velocity.x < player.size - 50 && one.getX() - two.pos.x + player.velocity.x > 0 && two.pos.x - one.getY() + player.velocity.x < player.size){
-    if(dragon.attack == true) { 
+    if(dragon.state == dragonState.attack) { 
       one.explode();
       print("Player hit by projectile!");
       player.deductHealth(5); 
     }
-     dragon.attack = false;
+     dragon.state = dragonState.attack;
   }
 }

@@ -55,16 +55,15 @@ class projectile{
     
     if (this.getY() + 40 >= 465) { //collision with ground 
       this.moveY(465 - 40);
+      this.velocity.y = 0;
+      this.velocity.x = 0;
       this.explode();
-    }
-    
-    println(frameIndex);
-    
+    }    
     if (exploding == true){
       if (frameCount % 4 == 0){
         if (frameIndex < 3 || frameIndex > 6){ frameIndex = 3; } //makes sure index isnt out of range
         else if (frameIndex == 6){ //ends the animation
-          dragon.attack = false; 
+          dragon.state = dragonState.idle; 
           frameIndex = 6;
           return;
         } 
@@ -74,7 +73,7 @@ class projectile{
       image(frame, this.x, this.y); //draw the sprite
     }
     else { 
-      if (frameCount % 4 == 0){
+      if (frameCount % 2 == 0){
         if (frameIndex < 0 || frameIndex > 2){ frameIndex = 0; } //makes sure index isnt out of range
         else if (frameIndex == 2){ frameIndex = 0; } //wraps around to the start of the animation
         else { frameIndex += 1; }
