@@ -11,7 +11,7 @@ class player{
   PVector velocity = new PVector(5, -20);
   float gravity = 9.8;
   float jumpHeight = 200;
-  PImage[] sprites = new PImage[100];
+  PImage[] sprites = new PImage[45];
   PImage frame;
   int frameIndex = 0;
   
@@ -26,21 +26,32 @@ class player{
 
   }
   
-  //modify x value
+/**
+  Moves x and y positions
+**/
   void moveX(float newX){ this.pos.x = newX; }
-  //modify y value
   void moveY(float newY){ this.pos.y = newY; }
-  //modify health
+
+/**
+  Deducts player health
+**/
   void deductHealth(float deduction){  
     this.health -= deduction; 
     if (this.health < 0){ this.health = 0; }
   }
-  //is the player dead?
+
+/**
+  Checks if player health is 0
+  If so, player is dead
+**/
   Boolean isPlayerDead(){
     if (this.health <= 0){ return true; }
     else { return false; }
   }
   
+/**
+  Draws the player
+**/
   void drawChar() { 
     
     //checking collision w/ walls and floor
@@ -121,8 +132,8 @@ class player{
     }
     if(state == animState.jumpRight){
       if (frameCount % 2 == 0){ //prevents animation playing too fast
-        if (frameIndex < 37 || frameIndex > 42){ frameIndex = 37; } //makes sure index isnt out of range
-        else if (frameIndex == 42){ frameIndex = 37; } //wraps around to the start of the animation
+        if (frameIndex < 37 || frameIndex > 44){ frameIndex = 37; } //makes sure index isnt out of range
+        else if (frameIndex == 44){ frameIndex = 37; } //wraps around to the start of the animation
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
@@ -131,7 +142,9 @@ class player{
 
 }
 
-  //abandon hope all ye who enter here
+/**
+  Loads sprites from spritesheets into sprite array
+**/
   void initialiseSprites(){
     PImage idleLeft = loadImage("seb_idle_left.png");
     PImage idleRight = loadImage("seb_idle_right.png");
@@ -158,7 +171,7 @@ class player{
       x = 0;
     for(int i = 0; i < 8; i++){
       sprites[i+30] = jumpLeft.get(x, y, 224, 224); //left run= sprite collection index 30-36
-      sprites[i+37] = jumpRight.get(x, y, 224, 224); //right run = sprite collection index 37-42
+      sprites[i+37] = jumpRight.get(x, y, 224, 224); //right run = sprite collection index 37-44
       x = x + 224;
     }
   }

@@ -8,6 +8,7 @@ class background{
   PImage background3;
   PImage backgroundDecor;
   PImage titleScreen;
+  PImage instructions;
   PImage dragonSelect1;
   PImage dragonSelect2;
   PImage dragonSelect3;
@@ -21,7 +22,7 @@ class background{
   PImage[] dragonSelect = new PImage[3];
   String dragon;
 
-  background(String dragon, String player){
+  background(String dragon){
     this.dragon = dragon;
     this.backgroundCamera = new PVector(1, 1, 0);
     this.background1Pos = new PVector(0, 0, 3);
@@ -30,6 +31,7 @@ class background{
     
     this.backgroundDecor = loadImage("backgroundDecor.png");
     this.titleScreen = loadImage("title.png");
+    this.instructions = loadImage("instructions.png");
     this.win = loadImage("win.png");
     this.lose = loadImage("lose.png");
     this.playerIconHealth = loadImage("seb_icon.png");
@@ -65,7 +67,10 @@ class background{
     }
 
   }
-  
+ 
+/**
+  Draws the background during gameplay
+**/
   void drawBackground(float playerHealth, float dragonHealth){
       backgroundCamera.x = player.pos.x + player.velocity.x;
       image(background1, parallaxCalc(background1Pos.x, background1Pos.z) , background1Pos.y);
@@ -77,9 +82,15 @@ class background{
       else if (dragon.equals("iymrith")){ image(dragonIconHealth, 655 + (dragonHealth * 2.7), 39); }
       else if (dragon.equals("arngalor")){ image(dragonIconHealth, 665 + (dragonHealth * 1.3), 39); }
   }
-  
+ 
+/**
+  Draws the title screen
+**/
   void drawTitleScreen(){ image(titleScreen, 0, 0); }
-  
+
+/**
+  Draws the select dragon screen
+**/
   void selectDragon(int index){
     image(dragonSelect[index], 0, 0);
     image(dragonIcon1, 137, 182);
@@ -87,10 +98,26 @@ class background{
     image(dragonIcon3, 649, 182);
   }
   
+/**
+  Draws the win screen
+**/
   void win(){ image(win, 0, 0); }
   
+/**
+  Draws the lose screen
+**/
   void lose(){ image(lose, 0, 0); }
   
+/**
+  Draws the instructions screen
+**/
+  void instructions() { image(instructions, 0, 0); }
+  
+/**
+  Calculates the parallax effect for the background
+  Xposition divided by Zposition creates parallax effect
+  Zposition = distance from the camera
+**/
   float parallaxCalc(float x, float z){ return((x-backgroundCamera.x) / z); }
 
 }

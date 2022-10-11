@@ -1,5 +1,5 @@
 enum gameState {
-    titleScreen, playerSelect, dragonSelect, dragonConfirm, gamePlay, dead, win
+    titleScreen, instructionScreen, playerSelect, dragonSelect, dragonConfirm, gamePlay, dead, win
   };
 gameState state; //initialised in setup method
 player player;
@@ -18,7 +18,7 @@ void setup(){
   background(0);
   state = gameState.titleScreen;
   player = new player("player", 56, 425, 231, 20);
-  bg = new background("null", "player");
+  bg = new background("null");
   dragons.add("balagos");
   dragons.add("iymrith");
   dragons.add("arngalor");
@@ -28,17 +28,14 @@ void setup(){
 
 void draw(){
   if (state == gameState.titleScreen){ bg.drawTitleScreen(); }
+  else if (state == gameState.instructionScreen) { bg.instructions(); }
   else if (state == gameState.dragonSelect || state == gameState.dragonConfirm) { dragonSelect(); }
   else if (state == gameState.dead){ playerDead(); }
   else if (state == gameState.win) { playerWin(); }
   else if (state == gameState.gamePlay){
     bg.drawBackground(player.health, dragon.health);
     player.drawChar();
-    dragon.drawChar();
-  
-  //dragon health bar
-  //rect(270, 30, dragon.health * 3, 10);
-  
+    dragon.drawChar();  
     dragon.isDragonAttacking();
     checkCharCollision(dragon, player);
     Boolean dead = player.isPlayerDead();
@@ -63,7 +60,8 @@ void keyPressed() {
    }
    else if (key == 'e') { player.state = animState.attacking; }
    else if (key == ' ') { //SPACE
-      if (state == gameState.titleScreen){ state = gameState.dragonSelect; }
+      if (state == gameState.titleScreen){ state = gameState.instructionScreen; }
+      else if (state == gameState.instructionScreen){ state = gameState.dragonSelect; }
       else if (state == gameState.dragonSelect){ state = gameState.dragonConfirm; }
       else if (state == gameState.gamePlay){ 
         if (player.state == animState.moveLeft || player.state == animState.idleLeft){ player.state = animState.jumpLeft; }
@@ -82,6 +80,9 @@ void keyReleased() {
   else if(player.state == animState.attacking) { player.state = animState.idleRight; }
 }
 
+ /**
+  Dragon selection screen (level select)
+**/
 void dragonSelect(){
   String name;
   if (menuNavigationIndex >= dragons.size()){ menuNavigationIndex = 0; }
@@ -90,38 +91,50 @@ void dragonSelect(){
   if (state == gameState.dragonConfirm) { 
     name = dragons.get(menuNavigationIndex);
     dragon = new dragon(name, 680, 100, 400);
-    bg = new background(name, "player");
+    bg = new background(name);
     menuNavigationIndex = 0;
     state = gameState.gamePlay;
     }
 }
 
+ /**
+  Player dead screen (player reaches 0 health)
+**/
 void playerDead(){
   bg.lose();
   player = new player("player", 56, 425, 231, 20);
 }
 
+ /**
+  Player win screen (dragon reaches 0 health)
+**/
 void playerWin(){
   bg.win();
   player = new player("player", 56, 425, 231, 20);
 }
 
+ /**
+  Check collision between dragon and player
+  For the purposes of deducting dragon health if player is attacking
+**/
 void checkCharCollision(dragon one, player two){
-  if (one.getX() - two.pos.x < 0){
+  if (one.pos.x - two.pos.x < 0){
     if(player.state == animState.attacking) { 
       dragon.deductHealth(5);
     } 
   }
 }
   
+ /**
+  Check collision between dragon's projectiles and player
+  For the purposes of deducting player health if dragon is attacking
+**/
 void checkProjCollision(projectile one, player two){
-  
-  if (one.getX() - two.pos.x + player.velocity.x < player.size - 50 && one.getX() - two.pos.x + player.velocity.x > 0 && two.pos.x - one.getY() + player.velocity.x < player.size){
+  if (one.pos.x - two.pos.x + player.velocity.x < player.size - 50 && one.pos.x - two.pos.x + player.velocity.x > 0 && two.pos.x - one.pos.y + player.velocity.x < player.size){
     if(dragon.state == dragonState.attack) { 
-      one.explode();
-      print("Player hit by projectile!");
+      one.explode(); //explodes when hits player
       player.deductHealth(5); 
     }
-     dragon.state = dragonState.attack;
+     dragon.state = dragonState.idle;
   }
 }

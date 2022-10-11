@@ -1,6 +1,5 @@
 class projectile{
-  float x;
-  float y;
+  PVector pos = new PVector(0, 0);
   boolean exploding;
   PVector velocity = new PVector(3, 0.0002);
   float gravity;
@@ -9,8 +8,8 @@ class projectile{
   int frameIndex = 0;
   
   projectile(float x, float y, float grav, String dragon){
-    this.x = x;
-    this.y = y;
+    this.pos.x = x;
+    this.pos.y = y;
     this.gravity = grav;
     this.exploding = false;
     
@@ -41,23 +40,30 @@ class projectile{
     }
     
   }
-  
-  void moveX(float newX){ this.x = newX; }
-  
-  void moveY(float newY) { this.y = newY; }
-  
+ /**
+  Moves x and y positions
+**/
+  void moveX(float newX){ this.pos.x = newX; }
+  void moveY(float newY) { this.pos.y = newY; }
+
+/**
+  Changes from projectile falling to projectile exploding
+**/
   void explode() { this.exploding = true; }
-  
+ 
+/**
+  Draws projectile
+**/  
   void drawProjectile() {
-    proj.moveX(proj.getX() - velocity.x);
-    proj.moveY(proj.getY() + velocity.y);
+    proj.moveX(proj.pos.x - velocity.x);
+    proj.moveY(proj.pos.y + velocity.y);
     velocity.y += gravity;
     
-    if (this.getY() + 40 >= 465) { //collision with ground 
+    if (this.pos.y + 40 >= 465) { //collision with ground 
       this.moveY(465 - 40);
       this.velocity.y = 0;
       this.velocity.x = 0;
-      this.explode();
+      this.explode(); //explodes when hits the ground
     }    
     if (exploding == true){
       if (frameCount % 4 == 0){
@@ -70,7 +76,7 @@ class projectile{
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
-      image(frame, this.x, this.y); //draw the sprite
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
     }
     else { 
       if (frameCount % 2 == 0){
@@ -79,11 +85,7 @@ class projectile{
         else { frameIndex += 1; }
       }
       frame = sprites[frameIndex];
-      image(frame, this.x, this.y); //draw the sprite
+      image(frame, this.pos.x, this.pos.y); //draw the sprite
     } 
   }
-  
-  float getX() { return this.x; }
-  
-  float getY() { return this.y; }
 }
